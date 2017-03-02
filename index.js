@@ -1,6 +1,6 @@
 const LedModule = require('bindings')('LEDModule');
 /**
- * Creates an instance of LightSensor.
+ * Creates an instance of LEDModule.
  * @param {int} port The port number where this component us connected.
  * @returns {LEDModule} LEDModule object
  */
