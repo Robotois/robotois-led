@@ -32,13 +32,11 @@ LEDModule.prototype.flash = function flash() {
 };
 
 LEDModule.prototype.blink = function blink() {
-  const interval = setInterval(() => {
-    this.flash();
-  }, 300);
-
-  setTimeout(() => {
-    clearInterval(interval);
-  }, 2000);
+  if (!this.interval) {
+    this.interval = setInterval(() => {
+      this.toggle();
+    }, 400); // cambiar estado cada 400ms
+  }
 };
 
 LEDModule.prototype.turnOn = function turnOn() {
@@ -46,6 +44,7 @@ LEDModule.prototype.turnOn = function turnOn() {
 };
 
 LEDModule.prototype.turnOff = function turnOff() {
+  clearInterval(this.interval);
   this.write(0);
 };
 
@@ -58,6 +57,7 @@ LEDModule.prototype.toggle = function toggle() {
 };
 
 LEDModule.prototype.release = function release() {
+  clearInterval(this.interval);
   this.led.release();
 };
 
