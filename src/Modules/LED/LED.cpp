@@ -1,7 +1,7 @@
-/* 
+/*
  * File:   LED.cpp
  * Author: yova
- * 
+ *
  * Created on 8 de septiembre de 2016, 05:48 PM
  */
 
@@ -25,7 +25,7 @@ void LED::write(uint8_t state){
 }
 
 void LED::release(){
-    printf("[LEDModule] => Released\n");
     IOHeader->release();
-    delete IOHeader;    
+    delete IOHeader;
+    printf("[LEDModule] => Released\n");
 }

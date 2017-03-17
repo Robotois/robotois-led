@@ -8,12 +8,10 @@ function LEDModule(header){
 
   process.on('SIGINT', function () {
     _self.led.release();
-    // process.exit();
   });
 
   process.on('SIGTERM', function () {
     _self.led.release();
-    // process.exit();
   });
 }
 
@@ -48,7 +46,7 @@ LEDModule.prototype.turnOff = function () {
   this.write(0);
 };
 
-LEDModule.prototype.switch = function(){
+LEDModule.prototype.toggle = function(){
   if(this.led_status == 1){
     this.write(0);
   }else{

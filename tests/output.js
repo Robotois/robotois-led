@@ -3,7 +3,7 @@ var _led = require('../index'),
 
 
 setInterval(()=>{ // Proceso en estado ocioso
-  led.switch();
+  led.toggle();
 },1000);
 
 process.on('SIGTERM', function () {
