@@ -105,7 +105,7 @@ void LEDWrapper::write(const FunctionCallbackInfo<Value>& args){
   uint8_t _argc = args.Length();
   if(_argc != 1){
     isolate->ThrowException(Exception::TypeError(
-    String::NewFromUtf8(isolate, "Wrong arguments for Motor Module...")));
+    String::NewFromUtf8(isolate, "Wrong arguments for LED Module...")));
   }
 
   int8_t state = (int8_t) args[0]->NumberValue();
@@ -114,9 +114,3 @@ void LEDWrapper::write(const FunctionCallbackInfo<Value>& args){
   temp_obj->led->write(state);
   // args.GetReturnValue().Set(Number::New(isolate,temp_obj->led->read()));
 }
-
-// void Temperature(){
-//   OpticalDistanceSensor temp;
-//   temp.selectPort(3);
-//   printf("Temp Input: %0.2f\n",temp.getTemperature());
-// }

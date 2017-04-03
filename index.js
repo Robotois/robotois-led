@@ -7,7 +7,8 @@ const LedModule = require('bindings')('LEDModule');
 function LEDModule(port) {
   const selft = this;
   this.led = new LedModule(port);
-  this.led_status = 0;
+  this.ledStatus = 0;
+  this.blinkStatus = false;
 
   process.on('SIGINT', () => {
     selft.led.release();
@@ -19,7 +20,7 @@ function LEDModule(port) {
 }
 
 LEDModule.prototype.write = function write(ledValue) {
-  this.led_status = ledValue;
+  this.ledStatus = ledValue;
   this.led.write(ledValue);
 };
 
@@ -31,25 +32,31 @@ LEDModule.prototype.flash = function flash() {
   // sleep.usleep(300000); // Stops the execution for 3 secs
 };
 
-LEDModule.prototype.blink = function blink() {
-  if (!this.interval) {
-    this.interval = setInterval(() => {
-      this.toggle();
-    }, 400); // cambiar estado cada 400ms
+LEDModule.prototype.blink = function blink(blinkEnable) {
+  this.blinkStatus = blinkEnable;
+  if (blinkEnable) {
+    if (!this.blinkInterval) {
+      this.blinkInterval = setInterval(() => {
+        this.toggle();
+      }, 500); // cambiar estado cada 500ms
+    }
+  } else {
+    this.turnOff();
   }
 };
 
 LEDModule.prototype.turnOn = function turnOn() {
+  clearInterval(this.blinkInterval);
   this.write(1);
 };
 
 LEDModule.prototype.turnOff = function turnOff() {
-  clearInterval(this.interval);
+  clearInterval(this.blinkInterval);
   this.write(0);
 };
 
 LEDModule.prototype.toggle = function toggle() {
-  if (this.led_status === 1) {
+  if (this.ledStatus === 1) {
     this.write(0);
   } else {
     this.write(1);
@@ -57,7 +64,7 @@ LEDModule.prototype.toggle = function toggle() {
 };
 
 LEDModule.prototype.release = function release() {
-  clearInterval(this.interval);
+  clearInterval(this.blinkInterval);
   this.led.release();
 };
 
