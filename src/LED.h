@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   LED.h
  * Author: yova
  *
@@ -9,7 +9,7 @@
 #define	LED_H
 
 #include <bcm2835.h>
-#include "../../Libraries/DigitalIO/DigitalHeader.h"
+#include "./libraries/robotois-digital-header/DigitalHeader.h"
 
 class LED {
 public:
@@ -17,13 +17,12 @@ public:
     LED(uint8_t _header);
     LED(const LED& orig);
     virtual ~LED();
-    
+
     void write(uint8_t state);
-    
+
     void release();
 private:
     DigitalHeader *IOHeader;
 };
 
 #endif	/* LED_H */
-

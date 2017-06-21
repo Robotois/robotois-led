@@ -3,7 +3,7 @@
 
 #include <node.h>
 #include <node_object_wrap.h>
-#include "src/Modules/LED/LED.h"
+#include "../LED.h"
 
 class LEDWrapper : public node::ObjectWrap {
 public:

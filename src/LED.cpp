@@ -10,7 +10,7 @@
 #include "LED.h"
 
 LED::LED(uint8_t _header) {
-    IOHeader = new DigitalHeader(_header,(uint8_t)AS_OUTPUT,(uint8_t)AS_OUTPUT);
+    IOHeader = new DigitalHeader(_header, (uint8_t)AS_OUTPUT, (uint8_t)AS_OUTPUT);
 }
 
 LED::LED(const LED& orig) {
