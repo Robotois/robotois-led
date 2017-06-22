@@ -9,6 +9,7 @@ function LEDModule(port) {
   this.led = new LedModule(port);
   this.ledStatus = 0;
   this.blinkStatus = false;
+  this.blinkInterval = false;
 
   process.on('SIGINT', () => {
     selft.led.release();
@@ -47,11 +48,13 @@ LEDModule.prototype.blink = function blink(blinkEnable) {
 
 LEDModule.prototype.turnOn = function turnOn() {
   clearInterval(this.blinkInterval);
+  this.blinkInterval = false;
   this.write(1);
 };
 
 LEDModule.prototype.turnOff = function turnOff() {
   clearInterval(this.blinkInterval);
+  this.blinkInterval = false;
   this.write(0);
 };
 
