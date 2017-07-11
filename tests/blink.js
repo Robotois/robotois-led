@@ -1,11 +1,11 @@
 const LED = require('../index');
 
-const led = new LED(5);
+const led = new LED(6);
 
-led.blink(true);
+led.blink();
 
 setTimeout(() => {
-  led.blink(false);
+  led.turnOff();
 }, 5000);
 
 process.on('SIGTERM', () => {
