@@ -30,11 +30,11 @@ LEDModule.prototype.flash = function flash() {
   setTimeout(() => {
     this.write(0);
   }, 3000);
-  // sleep.usleep(300000); // Stops the execution for 3 secs
 };
 
 LEDModule.prototype.blink = function blink() {
   if (!this.blinkInterval) {
+    this.write(1); // Establecer estado inicial
     this.blinkInterval = setInterval(() => {
       this.toggle();
     }, 500); // cambiar estado cada 500ms
