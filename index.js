@@ -8,7 +8,7 @@ function LEDModule(port) {
   const selft = this;
   this.led = new LedModule(port);
   this.ledStatus = 0;
-  this.blinkStatus = false;
+  // this.blinkStatus = false;
   this.blinkInterval = false;
 
   process.on('SIGINT', () => {
@@ -22,18 +22,31 @@ function LEDModule(port) {
 
 LEDModule.prototype.write = function write(ledValue) {
   this.ledStatus = ledValue;
+  if (!this.blinkInterval) {
+    this.mqttClient.publish(this.myTopic, this.ledStatus.toString());
+  }
   this.led.write(ledValue);
 };
 
-LEDModule.prototype.flash = function flash() {
-  this.write(1);
-  setTimeout(() => {
-    this.write(0);
-  }, 3000);
+LEDModule.prototype.publishNow = function publishNow() {
+  this.mqttClient.publish(
+    this.myTopic,
+    this.blinkInterval ? 'blink' : this.ledStatus.toString(),
+  );
+};
+
+LEDModule.prototype.setMqttClient = function setMqttClient(mqttConfig) {
+  this.mqttClient = mqttConfig.mqttClient;
+  this.myTopic = `digitalOutputs/led${mqttConfig.instance}`;
+  this.mqttClient.publish('registerTopic', this.myTopic);
 };
 
 LEDModule.prototype.blink = function blink() {
   if (!this.blinkInterval) {
+    if (this.mqttClient) {
+      this.mqttClient.publish(this.myTopic, 'blink');
+    }
+    this.blinkInterval = true;
     this.write(1); // Establecer estado inicial
     this.blinkInterval = setInterval(() => {
       this.toggle();

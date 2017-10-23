@@ -1,6 +1,6 @@
 {
   "name": "robotois-led",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,11 @@
       "url": "http://armando.mx/"
     }
   ],
+  "homepage": "https://github.com/Robotois/robotois-led",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Robotois/robotois-led.git"
+  },
   "license": "ISC",
   "dependencies": {
     "bindings": "^1.2.1"

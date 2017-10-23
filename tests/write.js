@@ -1,6 +1,6 @@
 const LED = require('../index');
 
-const led = new LED(5);
+const led = new LED(4);
 
 led.write(1);
 setTimeout(() => {

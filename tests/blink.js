@@ -1,6 +1,6 @@
-const LED = require('../index');
+const LED = require('../');
 
-const led = new LED(6);
+const led = new LED(4);
 
 led.blink();
 
