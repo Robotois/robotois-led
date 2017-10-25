@@ -7,7 +7,7 @@ const LedModule = require('bindings')('LEDModule');
 function LEDModule(port) {
   const selft = this;
   this.led = new LedModule(port);
-  this.ledStatus = -1;
+  this.ledStatus = 0;
   this.blinkInterval = false;
 
   process.on('SIGINT', () => {
@@ -42,7 +42,14 @@ LEDModule.prototype.publishNow = function publishNow() {
 LEDModule.prototype.setMqttClient = function setMqttClient(mqttConfig) {
   this.mqttClient = mqttConfig.mqttClient;
   this.myTopic = `digitalOutputs/led${mqttConfig.instance}`;
-  this.mqttClient.publish('registerTopic', this.myTopic);
+};
+
+LEDModule.prototype.setValue = function setValue(value, notify) {
+  this.led.write(value);
+  this.ledStatus = value;
+  if (this.mqttClient && notify) {
+    this.mqttClient.publish(this.myTopic, value.toString());
+  }
 };
 
 LEDModule.prototype.blink = function blink() {
@@ -50,8 +57,7 @@ LEDModule.prototype.blink = function blink() {
     if (this.mqttClient) {
       this.mqttClient.publish(this.myTopic, 'blink');
     }
-    this.ledStatus = 1;
-    this.led.write(1);
+    this.setValue(1, false);
     this.blinkInterval = setInterval(() => {
       this.toggle();
     }, 500); // cambiar estado cada 500ms
@@ -62,20 +68,12 @@ LEDModule.prototype.turnOn = function turnOn() {
   if (this.blinkInterval) {
     clearInterval(this.blinkInterval);
     this.blinkInterval = false;
-    this.led.write(1);
-    this.ledStatus = 1;
-    if (this.mqttClient) {
-      this.mqttClient.publish(this.myTopic, '1');
-    }
+    this.setValue(1, true);
     return;
   }
 
   if (this.ledStatus === 0) {
-    this.led.write(1);
-    this.ledStatus = 1;
-    if (this.mqttClient) {
-      this.mqttClient.publish(this.myTopic, '1');
-    }
+    this.setValue(1, true);
   }
 };
 
@@ -83,30 +81,20 @@ LEDModule.prototype.turnOff = function turnOff() {
   if (this.blinkInterval) {
     clearInterval(this.blinkInterval);
     this.blinkInterval = false;
-    this.led.write(0);
-    this.ledStatus = 0;
-    if (this.mqttClient) {
-      this.mqttClient.publish(this.myTopic, '0');
-    }
+    this.setValue(0, true);
     return;
   }
 
   if (this.ledStatus === 1) {
-    this.led.write(0);
-    this.ledStatus = 0;
-    if (this.mqttClient) {
-      this.mqttClient.publish(this.myTopic, '0');
-    }
+    this.setValue(0, true);
   }
 };
 
 LEDModule.prototype.toggle = function toggle() {
   if (this.ledStatus === 1) {
-    this.ledStatus = 0;
-    this.led.write(0);
+    this.setValue(0, false);
   } else {
-    this.ledStatus = 1;
-    this.led.write(1);
+    this.setValue(1, false);
   }
 };
 
